@@ -20,6 +20,19 @@ public class TemperatureDevice {
 		// - publish the temperature(s)
 		// - disconnect from the broker
 
+		Client client = new Client("sensor", Common.BROKERHOST, Common.BROKERPORT);
+
+		client.connect();
+		for (int i = 0; i < COUNT; i++) {
+			int temp = sn.read();
+			client.publish(Common.TEMPTOPIC, "Temperaturen er " + temp + " Celsius.");
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		client.disconnect();
 		// TODO - end
 
 		System.out.println("Temperature device stopping ... ");
